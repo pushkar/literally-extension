@@ -1,0 +1,39 @@
+<!!-- Tutorial here http://literallycanvas.com/examples/export.html -->
+<html>
+  <head>
+    <!-- stylesheet -->
+    <link href="css/literallycanvas.css" rel="stylesheet">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/react/0.13.3/react-with-addons.js"></script>
+
+    <!-- Literally Canvas -->
+    <script src="js/literallycanvas.js"></script>
+  </head>
+  <body>
+    <!-- where the widget goes. you can do CSS to it. -->
+    <div class="literally"></div>
+
+    <form class="controls export">
+      <input type="submit" data-action="export-as-png" value="Export as PNG">
+    </form>
+
+    <script>
+    $(document).ready(function() {
+      var lc = LC.init(
+        document.getElementsByClassName('literally')[0], {imageURLPrefix: 'img'});
+      var localStorageKey = 'drawing'
+      if (localStorage.getItem(localStorageKey)) {
+        lc.loadSnapshot(JSON.parse(localStorage.getItem(localStorageKey)));
+      }
+      lc.on('drawingChange', function() {
+        localStorage.setItem(localStorageKey, JSON.stringify(lc.getSnapshot()));
+      });
+      $('.controls.export [data-action=export-as-png]').click(function(e) {
+        e.preventDefault();
+        window.open(lc.getImage().toDataURL());
+      });
+    });
+  </script>
+  </body>
+</html>
